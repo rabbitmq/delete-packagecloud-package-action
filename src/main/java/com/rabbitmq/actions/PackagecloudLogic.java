@@ -5,6 +5,8 @@
  */
 package com.rabbitmq.actions;
 
+import static com.rabbitmq.actions.LogUtils.logIndent;
+import static com.rabbitmq.actions.LogUtils.yellow;
 import static java.util.stream.Collectors.toList;
 
 import com.google.gson.reflect.TypeToken;
@@ -149,11 +151,10 @@ abstract class PackagecloudLogic {
       HttpRequest request =
           requestBuilder().DELETE().uri(URI.create(base + p.destroy_url())).build();
       try {
-        //        HttpResponse<Void> response = client.send(request,
-        // HttpResponse.BodyHandlers.discarding());
-        //        if (response.statusCode() != 200) {
-        //          logIndent(yellow("Unexpected response code:" + response.statusCode()));
-        //        }
+        HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+        if (response.statusCode() != 200) {
+          logIndent(yellow("Unexpected response code:" + response.statusCode()));
+        }
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
